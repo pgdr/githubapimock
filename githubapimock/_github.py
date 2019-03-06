@@ -35,4 +35,6 @@ def get_labels(repo, username, token, issue_id):
 
 
 def set_labels(repo, username, token, issue_id, labels:list):
-    pass
+    url = URL.format(repo=repo) + "/" + str(issue_id)
+    payload = { 'labels': labels }
+    requests.patch(url, auth=(username, token), json=payload)
