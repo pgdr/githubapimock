@@ -7,11 +7,11 @@ __CONN = None
 
 def _to_issue(issue):
     return {
-        'title' : issue[0],
-        'body':   issue[1],
-        'user':   issue[2],
-        'status': issue[3],
-        'number': issue[4]
+        'number': issue[0],
+        'title':  issue[1],
+        'body':   issue[2],
+        'user':   issue[3],
+        'status': issue[4],
     }
 
 
@@ -19,9 +19,19 @@ def _to_issue(issue):
 def _create_github(fname):
     conn = sqlite3.connect(fname)
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE issues (title, body, user, status, number)")
-    cursor.execute("CREATE TABLE labels (label, number)")
+
+    issues = ', '.join(['number INTEGER PRIMARY KEY ASC',
+                        'title TEXT',
+                        'body TEXT',
+                        'user TEXT',
+                        'status TEXT'])
+    q = f"CREATE TABLE issues ({issues});"
+    cursor.execute(q)
+
+    labels = 'label, number'
+    cursor.execute(f"CREATE TABLE labels ({labels})")
     conn.commit()
+
     return conn
 
 
@@ -56,10 +66,13 @@ def __execute(query, params=None, commit=False):
     return cursor
 
 
-def new_issue(title, body, user='', status='open', number=1):
-    q = f'INSERT INTO issues VALUES(?, ?, ?, ?, ?)'
-    __execute(q, (title, body, user, status, number), commit=True)
-    return number
+def new_issue(title, body, user='', status='open'):
+    q = 'INSERT INTO issues (title, body, user, status) VALUES (?, ?, ?, ?)'
+    __execute(q, (title, body, user, status), commit=True)
+    last = 'SELECT last_insert_rowid()'
+    cursor = __execute(last)
+    return cursor.fetchone()[0]
+
 
 
 def set_status(issue_id, status):
