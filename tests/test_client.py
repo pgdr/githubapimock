@@ -15,6 +15,13 @@ class TestClient(unittest.TestCase):
         nums = [x['number'] for x in client.get_column('bug')]
         self.assertIn(num, nums)
 
+    def test_progression(self):
+        num = client.create_bug_report('Bug a', 'buggy bugs')
+        client.start_issue(num)
+        self.assertEqual(
+            set(['bug', 'in progress']),
+            set(client.get_labels(num)))
+
 
 if __name__ == '__main__':
     unittest.main()
