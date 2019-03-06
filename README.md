@@ -1,3 +1,6 @@
+# githubapimock [![Build Status](https://travis-ci.org/pgdr/githubapimock.svg?branch=master)](https://travis-ci.org/pgdr/githubapimock)
+
+
 # Day 1 (Introduction to Python)
 
 In Windows using Jupyter Notebook -- A playground / experimentation lab.
