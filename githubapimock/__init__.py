@@ -1,5 +1,6 @@
 from ._mock import *
 from ._dao import new, close
+from . import _client as client
 
 
 
