@@ -5,7 +5,9 @@ username = ''
 token = ''
 
 PROGRESSION = ['backlog', 'todo', 'in progress', 'in review', 'done']
-TICKET_TYPES = ['bug', 'feature', 'epic']
+TICKET_TYPES = ['bug', 'feature', 'epic', 'duplicate', 'enhancement',
+                'good first issue', 'help wanted', 'invalid',
+                'question', 'wontfix']
 
 def _get_labels(num):
     return mock.get_labels(repo, username, token, num)

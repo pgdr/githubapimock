@@ -1,6 +1,3 @@
-import os
-from contextlib import contextmanager
-
 from . import _dao as dao
 
 def create_issue(repo, username, token, title, body) -> int:
