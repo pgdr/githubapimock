@@ -70,20 +70,23 @@ In Linux using gedit and the terminal, as well as git.
 
 
 ```yml
-* title: Define an issue
-  body:  Use comments in the source code, or better yet, a function (abstraction), which takes title, body and returns a dict
-* title: Implement create_issue
-  body:  `create_issue` takes input `repo`, `username`, `token`, `title`, `body`, and returns `id`?
-* title: Implement close_issue
-  body:  `close_issue` takes input `repo`, `username`, `token`, `issue_id`
-* title: Implement get_issue
-  body:  `get_issue` takes input `repo`, `username`, `token`, `issue_id`
-* title: Implement get_issues
-  body:  `get_issues` takes input `repo`, `username`, `token`
-* title: Advanced: Implement get_labels
-  body:  `get_labels` takes input `repo`, `username`, `token`, `issue_id`
-* title: Advanced: Implement set_labels
-  body:  `set_labels` takes input `repo`, `username`, `token`, `issue_id`, `labels:list`
+- title: "Define an issue"
+  body:  "Use comments in the source code, or better yet, a function
+          (abstraction), which takes title, body and returns a dict"
+- title: "Implement create_issue"
+  body:  "`create_issue` takes input `repo`, `username`, `token`, `title`,
+          `body`, and returns `id`?"
+- title: "Implement close_issue"
+  body:  "`close_issue` takes input `repo`, `username`, `token`, `issue_id`"
+- title: "Implement get_issue"
+  body:  "`get_issue` takes input `repo`, `username`, `token`, `issue_id`"
+- title: "Implement get_issues"
+  body:  "`get_issues` takes input `repo`, `username`, `token`"
+- title: "Advanced: Implement get_labels"
+  body:  "`get_labels` takes input `repo`, `username`, `token`, `issue_id`"
+- title: "Advanced: Implement set_labels"
+  body:  "`set_labels` takes input `repo`, `username`, `token`, `issue_id`,
+          `labels:list`"
 ```
 
 # The API
