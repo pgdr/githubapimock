@@ -8,41 +8,41 @@ In Windows using Jupyter Notebook -- A playground / experimentation lab.
 Open Slack!
 
 1. Introduction to programming
- * What is a computer program
- * What is correctness
- * What is maintainability
- * Is there such a thing as "good code"?
+   * What is a computer program
+   * What is correctness
+   * What is maintainability
+   * Is there such a thing as "good code"?
 2. Methodology
- * What is a programming methodology
- * What is agile, scrum, kanban and XP
- * Who are SCOUT and how do they work?
+   * What is a programming methodology
+   * What is agile, scrum, kanban and XP
+   * Who are SCOUT and how do they work?
 3. Variables, types, functions, modules, tdd, exceptions
- * Basic types
-  * int/float/bool
-  * str
-  * list
-  * dict
- * Loop and control flow
-  * for
-  * if
- * Functions
-  * well defined
-  * naming
-  * black box
- * modules and encapsulation
-  * e.g. `get` from `requests`
+   * Basic types
+     * int/float/bool
+     * str
+     * list
+     * dict
+   * Loop and control flow
+     * for
+     * if
+   * Functions
+     * well defined
+     * naming
+     * black box
+   * modules and encapsulation
+     * e.g. `get` from `requests`
 4. Make a repository
- * Get to know GitHub
- * What is git?  (more about this Day 2)
+   * Get to know GitHub
+   * What is git?  (more about this Day 2)
 5. Create GitHub issues from YAML via API
- * What is an issue
- * What are the properties of an issue?
-  * title
-  * body
-  * user
-  * number
- * Use dict to represent an issue
- * Severals issues are contained in a list of dicts
+   * What is an issue
+   * What are the properties of an issue?
+     * title
+     * body
+     * user
+     * number
+   * Use dict to represent an issue
+   * Severals issues are contained in a list of dicts
 
 
 # Day 2 (Introduction to serious Python)
@@ -50,12 +50,12 @@ Open Slack!
 In Linux using gedit and the terminal, as well as git.
 
 1. No more playtime
- * start terminal
- * start editor
- * run program from terminal
+   * start terminal
+   * start editor
+   * run program from terminal
 2. Running Python on Linux
- * Source `PYTHON_VERSION=3.7.1`
- * Create virtualenvs
+   * Source `PYTHON_VERSION=3.7.1`
+   * Create virtualenvs
 3. `git clone`, `status`, `diff`, `add`, `commit`, `push`
 4. Implement API (below)
 5. Test, `setup.py`, Travis,
