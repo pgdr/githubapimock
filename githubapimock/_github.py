@@ -30,7 +30,8 @@ def get_issues(repo, username, token):
 
 
 def get_labels(repo, username, token, issue_id):
-    pass
+    issue = get_issue(repo, username, token, issue_id)
+    return [ label['name'] for label in issue['labels'] ]
 
 
 def set_labels(repo, username, token, issue_id, labels:list):
