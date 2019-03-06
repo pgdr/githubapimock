@@ -10,6 +10,7 @@ class TestClient(unittest.TestCase):
     def tearDown(self):
         mock.close()
 
+
     def test_create_bug(self):
         num = client.create_bug_report('Bug a', 'buggy bugs')
         nums = [x['number'] for x in client.get_column('bug')]
@@ -32,7 +33,6 @@ class TestClient(unittest.TestCase):
             set(client.get_labels(num)))
 
 
-
     def test_progression_advance(self):
         num = client.create_issue('Feature a', 'buggy bugs feet')
         with self.assertRaises(Exception):
@@ -49,6 +49,19 @@ class TestClient(unittest.TestCase):
         with self.assertRaises(Exception):
             client.advance(num)
 
+
+    def test_status(self):
+        num = client.create_issue('Feature a', 'buggy bugs feet')
+        status = client.get_status(num)
+        self.assertEqual('open', status)
+
+        client.close_issue(num)
+        status = client.get_status(num)
+        self.assertEqual('closed', status)
+
+        client.set_status(num, 'xyz')
+        status = client.get_status(num)
+        self.assertEqual('xyz', status)
 
 
 if __name__ == '__main__':

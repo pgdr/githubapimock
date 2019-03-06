@@ -74,6 +74,11 @@ def new_issue(title, body, user='', status='open'):
     return cursor.fetchone()[0]
 
 
+def get_status(issue_id):
+    q = f'SELECT status FROM issues WHERE number == ?'
+    c = __execute(q, params=(issue_id,))
+    return c.fetchone()[0]
+
 
 def set_status(issue_id, status):
     q = f'UPDATE issues SET status = ? WHERE number == ?'

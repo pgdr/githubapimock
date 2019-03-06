@@ -22,6 +22,7 @@ def _create_issue_with_labels(title, body, labels):
 def create_issue(title, body):
     return _create_issue_with_labels(title, body, [])
 
+
 def create_bug_report(title, body):
     return _create_issue_with_labels(title, body, ['bug'])
 
@@ -38,8 +39,22 @@ def get_column(label):
         if label in labs:
             yield issue
 
+
+def get_status(number):
+    return mock.get_status(repo, username, token, number)
+
+
+def set_status(number, status):
+    mock.set_status(repo, username, token, number, status)
+
+
+def close_issue(number):
+    mock.close_issue(repo, username, token, number)
+
+
 def get_labels(number):
     return mock.get_labels(repo, username, token, number)
+
 
 def _progress_to(number, progress_label):
     labs = _get_labels(number)
