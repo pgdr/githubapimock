@@ -12,11 +12,7 @@ Open Slack!
    * What is correctness
    * What is maintainability
    * Is there such a thing as "good code"?
-2. Methodology
-   * What is a programming methodology
-   * What is agile, scrum, kanban and XP
-   * Who are SCOUT and how do they work?
-3. Variables, types, functions, modules, tdd, exceptions
+2. Variables, types, functions, modules, tdd, exceptions
    * Basic types
      * int/float/bool
      * str
@@ -31,10 +27,10 @@ Open Slack!
      * black box
    * modules and encapsulation
      * e.g. `get` from `requests`
-4. Make a repository
+3. Make a repository
    * Get to know GitHub
    * What is git?  (more about this Day 2)
-5. Create GitHub issues from YAML via API
+4. Create GitHub issues from YAML via API
    * What is an issue
    * What are the properties of an issue?
      * title
@@ -43,6 +39,11 @@ Open Slack!
      * number
    * Use dict to represent an issue
    * Severals issues are contained in a list of dicts
+5. Methodology [Flexible, soft component]
+   * What is a programming methodology
+   * What is agile, scrum, kanban and XP
+   * Who are SCOUT and how do they work?
+
 
 
 # Day 2 (Introduction to serious Python)
@@ -92,6 +93,20 @@ In Linux using gedit and the terminal, as well as git.
 # The API
 
 ```python
+import requests
+
+
+URL = 'https://api.github.com/repos/MY_USER_OR_ORG/{repo}/issues'
+
+
+def create_issue(repo, username, token, title, body) -> int:
+    payload = {'title': title, 'body': body}
+
+    url = URL.format(repo=repo)
+    resp = requests.post(url, auth=(username, token), json=payload)
+    return resp.json()['number']
+
+
 def create_issue(repo, username, token, title, body) -> int:
     pass
 
