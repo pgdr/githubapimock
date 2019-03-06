@@ -1,21 +1,25 @@
 import os
-
 from contextlib import contextmanager
-from tempfile import NamedTemporaryFile as ntf
 
-from ._dao import DAO
-from ._rest import rest
+from . import _dao as dao
 
+def create_issue(repo, username, token, title, body) -> int:
+    id_ = dao.new_issue(title, body)
+    return id_
 
+def close_issue(repo, username, token, issue_id):
+    dao.set_status(issue_id, 'closed')
 
-@contextmanager
-def mock(ip, port):
-    db_path = ntf(delete=False).name
-    github = DAO(db_path, ip, port)
-    with rest(ip, port):
+def get_issue(repo, username, token, issue_id) -> dict:
+    return dao.get_issue(issue_id)
 
-        yield
+def get_issues(repo, username, token):
+    return dao.get_issues()
 
-    del github
+def get_labels(repo, username, token, issue_id):
+    return dao.get_labels(issue_id)
 
-    os.unlink(db_path)
+def set_labels(repo, username, token, issue_id, labels:list):
+    dao.drop_labels(issue_id)
+    for label in labels:
+        dao.add_label(label, issue_id)
