@@ -43,5 +43,16 @@ class TestMock(unittest.TestCase):
         self.assertEqual(issue1_closed, issue1)
 
 
+    def test_label_issue(self):
+        num = mock.create_issue(repo, username, token, 'A', 'ala')
+        lab_exp = ['lab1', 'lab2']
+        mock.set_labels(repo, username, token, num, lab_exp)
+
+        lab_act = mock.get_labels(repo, username, token, num)
+
+        self.assertEqual(lab_exp, lab_act)
+
+
+
 if __name__ == '__main__':
     unittest.main()

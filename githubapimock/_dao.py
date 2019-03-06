@@ -95,17 +95,17 @@ def get_issues():
 
 
 def get_labels(issue_id):
-    q = 'SELECT * FROM labels WHERE number == ?'
-    cursor = __execute(q, params=str(issue_id))
-    return cursor.fetchall()
+    q = 'SELECT label FROM labels WHERE number == ?'
+    cursor = __execute(q, params=(issue_id,))
+    return [e[0] for e in cursor.fetchall()]
 
 
 def drop_labels(issue_id):
-    q = 'DROP FROM labels WHERE number == ?'
-    __execute(q, params=str(issue_id), commit=True)
+    q = 'DELETE FROM labels WHERE number == ?'
+    __execute(q, params=(issue_id,), commit=True)
 
 
 def add_label(label, issue_id):
-    q = 'INSERT INTO labels VALUES (?,?)'
-    cursor = __execute(q, params=str(label, issue_id))
+    q = 'INSERT INTO labels (label, number) VALUES (?,?)'
+    cursor = __execute(q, params=(label, issue_id), commit=True)
     return cursor.fetchall()
