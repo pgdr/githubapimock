@@ -10,10 +10,23 @@ TICKET_TYPES = ['bug', 'feature', 'epic']
 def _get_labels(num):
     return mock.get_labels(repo, username, token, num)
 
-def create_bug_report(title, body):
+
+def _create_issue_with_labels(title, body, labels):
     num = mock.create_issue(repo, username, token, title, body)
-    mock.set_labels(repo, username, token, num, ['bug'])
+    mock.set_labels(repo, username, token, num, labels)
     return num
+
+
+def create_issue(title, body):
+    return _create_issue_with_labels(title, body, [])
+
+def create_bug_report(title, body):
+    return _create_issue_with_labels(title, body, ['bug'])
+
+
+def create_feature_request(title, body):
+    return _create_issue_with_labels(title, body, ['feature'])
+
 
 def get_column(label):
     issues = mock.get_issues(repo, username, token)
@@ -31,8 +44,20 @@ def _progress_to(number, progress_label):
     new_labs = [progress_label] + [lab for lab in labs if lab not in PROGRESSION]
     mock.set_labels(repo, username, token, number, new_labs)
 
+
 def reset_issue(number):
     _progress_to(number, 'backlog')
 
+
 def start_issue(number):
     _progress_to(number, 'in progress')
+
+
+def advance(number):
+    labs = [lab for lab in _get_labels(number) if lab in PROGRESSION]
+    if not labs:
+        raise Exception(f'Issue {number} not labeled with progress')
+    if labs[0] == 'done':
+        raise Exception(f'Issue {number} completed, cannot progress further')
+    idx = PROGRESSION.index(labs[0])
+    _progress_to(number, PROGRESSION[idx+1])
