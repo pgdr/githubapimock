@@ -12,7 +12,9 @@ def create_issue(repo, username, token, title, body) -> int:
 
 
 def close_issue(repo, username, token, issue_id):
-    pass
+    url = URL.format(repo=repo) + "/" + str(issue_id)
+    payload = { 'state': 'closed' }
+    requests.patch(url, auth=(username, token), json=payload)
 
 
 def get_issue(repo, username, token, issue_id) -> dict:
@@ -28,8 +30,11 @@ def get_issues(repo, username, token):
 
 
 def get_labels(repo, username, token, issue_id):
-    pass
+    issue = get_issue(repo, username, token, issue_id)
+    return [ label['name'] for label in issue['labels'] ]
 
 
 def set_labels(repo, username, token, issue_id, labels:list):
-    pass
+    url = URL.format(repo=repo) + "/" + str(issue_id)
+    payload = { 'labels': labels }
+    requests.patch(url, auth=(username, token), json=payload)
