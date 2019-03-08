@@ -1,3 +1,4 @@
+import os
 import unittest
 import githubapimock as mock
 from githubapimock import client
@@ -5,6 +6,7 @@ from githubapimock import client
 
 class TestClient(unittest.TestCase):
     def setUp(self):
+        assert os.getenv('MOCK')
         mock.new()
 
     def tearDown(self):

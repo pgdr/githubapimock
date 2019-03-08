@@ -1,5 +1,6 @@
 from . import _mock as mock
 
+org = ''
 repo = ''
 username = ''
 token = ''
@@ -10,12 +11,12 @@ TICKET_TYPES = ['bug', 'feature', 'epic', 'duplicate', 'enhancement',
                 'question', 'wontfix']
 
 def _get_labels(num):
-    return mock.get_labels(repo, username, token, num)
+    return mock.get_labels(org, repo, username, token, num)
 
 
 def _create_issue_with_labels(title, body, labels):
-    num = mock.create_issue(repo, username, token, title, body)
-    mock.set_labels(repo, username, token, num, labels)
+    num = mock.create_issue(org, repo, username, token, title, body)
+    mock.set_labels(org, repo, username, token, num, labels)
     return num
 
 
@@ -32,7 +33,7 @@ def create_feature_request(title, body):
 
 
 def get_column(label):
-    issues = mock.get_issues(repo, username, token)
+    issues = mock.get_issues(org, repo, username, token)
     for issue in issues:
         num = issue['number']
         labs = _get_labels(num)
@@ -41,25 +42,25 @@ def get_column(label):
 
 
 def get_status(number):
-    return mock.get_status(repo, username, token, number)
+    return mock.get_status(org, repo, username, token, number)
 
 
 def set_status(number, status):
-    mock.set_status(repo, username, token, number, status)
+    mock.set_status(org, repo, username, token, number, status)
 
 
 def close_issue(number):
-    mock.close_issue(repo, username, token, number)
+    mock.close_issue(org, repo, username, token, number)
 
 
 def get_labels(number):
-    return mock.get_labels(repo, username, token, number)
+    return mock.get_labels(org, repo, username, token, number)
 
 
 def _progress_to(number, progress_label):
     labs = _get_labels(number)
     new_labs = [progress_label] + [lab for lab in labs if lab not in PROGRESSION]
-    mock.set_labels(repo, username, token, number, new_labs)
+    mock.set_labels(org, repo, username, token, number, new_labs)
 
 
 def reset_issue(number):
