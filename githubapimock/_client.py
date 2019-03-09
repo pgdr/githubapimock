@@ -41,12 +41,12 @@ def get_column(label):
             yield issue
 
 
-def get_status(number):
-    return mock.get_status(org, repo, username, token, number)
+def get_state(number):
+    return mock.get_state(org, repo, username, token, number)
 
 
-def set_status(number, status):
-    mock.set_status(org, repo, username, token, number, status)
+def set_state(number, state):
+    mock.set_state(org, repo, username, token, number, state)
 
 
 def close_issue(number):

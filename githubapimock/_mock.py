@@ -6,16 +6,16 @@ def create_issue(org, repo, username, token, title, body) -> int:
     return id_
 
 
-def get_status(org, repo, username, token, issue_id):
-    return dao.get_status(issue_id)
+def get_state(org, repo, username, token, issue_id):
+    return dao.get_state(issue_id)
 
 
-def set_status(org, repo, username, token, issue_id, status):
-    dao.set_status(issue_id, status)
+def set_state(org, repo, username, token, issue_id, state):
+    dao.set_state(issue_id, state)
 
 
 def close_issue(org, repo, username, token, issue_id):
-    set_status(org, repo, username, token, issue_id, 'closed')
+    set_state(org, repo, username, token, issue_id, 'closed')
 
 
 def get_issue(org, repo, username, token, issue_id) -> dict:

@@ -1,116 +1,128 @@
 import os
+from peewee import *
 import sqlite3
 
 __FNAME = '/tmp/mock.sqlite'
-__CONN = None
+db = SqliteDatabase(__FNAME)
+
+# an issue has keys
+#
+# * active_lock_reason : one of off-topic, too heated, resolved, spam)
+# * assignees : list of users
+# * assignee : user
+# * body : body
+# * closed_at : timestamp
+# * closed_by : user
+# * comments : number of comments
+# * comments_url : url
+# * created_at : timestamp
+# * events_url : url
+# * html_url : url
+# * id : id
+# * labels : list of dicts with key name
+# * labels_url : url
+# * locked : bool
+# * milestone : milestone
+# * node_id : str
+# * number : the id
+# * pull_request : dict of urls
+# * repository_url : url
+# * state : open or closed
+# * title : title
+# * updated_at : timestamp
+# * url : url
+# * user : user
 
 
-def _to_issue(issue):
+def _to_issue(issue, labs=tuple()):
     return {
-        'number': issue[0],
-        'title':  issue[1],
-        'body':   issue[2],
-        'user':   issue[3],
-        'status': issue[4],
+        'number': issue.id,
+        'title':  issue.title,
+        'body':   issue.body,
+        'user':   issue.user,
+        'state':  issue.state,
+        'labels': [ {'name': lab.name} for lab in labs ]
     }
 
 
+class Issue(Model):
+    title = CharField()
+    body = CharField()
+    user = CharField()
+    state = CharField()
 
-def _create_github(fname):
-    conn = sqlite3.connect(fname)
-    cursor = conn.cursor()
+    class Meta:
+        database = db
 
-    issues = ', '.join(['number INTEGER PRIMARY KEY ASC',
-                        'title TEXT',
-                        'body TEXT',
-                        'user TEXT',
-                        'status TEXT'])
-    q = f"CREATE TABLE issues ({issues});"
-    cursor.execute(q)
+class Label(Model):
+    name = CharField()
+    issue = ForeignKeyField(Issue)
 
-    labels = 'label, number'
-    cursor.execute(f"CREATE TABLE labels ({labels})")
-    conn.commit()
-
-    return conn
+    class Meta:
+        database = db
 
 
 def new():
-    global __CONN
-    close()
-    __CONN = _create_github(__FNAME)
-    return __CONN
-
+    global db
+    try:
+        if not db:
+            db = SqliteDatabase(__FNAME)
+        db.connect()
+        db.create_tables([Issue, Label])
+    except Exception as e:
+        print(e)
 
 def close():
-    global __CONN
-    if __CONN is not None:
-        __CONN.close()
-    try:
-        os.unlink(__FNAME)
-    except FileNotFoundError:
-        pass
+    global db
+    db.close()
+    db = None
+    os.unlink(__FNAME)
+
+def new_issue(title, body, user='', state='open'):
+    issue = Issue(
+        title=title,
+        body=body,
+        user=user,
+        state=state,
+    )
+    issue.save()
+    return issue.id
 
 
-def __execute(query, params=None, commit=False):
-    global __CONN
-    assert __CONN is not None
-    if params is not None:
-        assert type(params) == tuple, f'type of params was {type(params)}'
-    if params is None:
-        cursor = __CONN.execute(query)
-    else:
-        cursor = __CONN.execute(query, params)
-    if commit:
-        __CONN.commit()
-    return cursor
+def get_state(issue_id):
+    return Issue.get(id=issue_id).state
 
 
-def new_issue(title, body, user='', status='open'):
-    q = 'INSERT INTO issues (title, body, user, status) VALUES (?, ?, ?, ?)'
-    __execute(q, (title, body, user, status), commit=True)
-    last = 'SELECT last_insert_rowid()'
-    cursor = __execute(last)
-    return cursor.fetchone()[0]
-
-
-def get_status(issue_id):
-    q = f'SELECT status FROM issues WHERE number == ?'
-    c = __execute(q, params=(issue_id,))
-    return c.fetchone()[0]
-
-
-def set_status(issue_id, status):
-    q = f'UPDATE issues SET status = ? WHERE number == ?'
-    __execute(q, params=(status, issue_id), commit=True)
+def set_state(issue_id, state):
+    issue = Issue.get(id=issue_id)
+    issue.state = state
+    issue.save()
 
 
 def get_issue(issue_id):
-    assert type(issue_id) == int, f'was {type(issue_id)}'
-    q = 'SELECT * FROM issues WHERE number == ?'
-    cursor = __execute(q, params=(issue_id,))
-    issue = cursor.fetchone()
-    return _to_issue(issue)
+    issue = Issue.get(Issue.id == issue_id)
+    labs = Label.select().where(Label.issue == issue_id)
+    return _to_issue(issue, labs=labs)
 
 
-def get_issues():
-    q = 'SELECT * FROM issues'
-    cursor = __execute(q)
-    return [_to_issue(issue) for issue in cursor.fetchall()]
+def get_issues(state='open'):
+    return [_to_issue(issue) for issue in Issue.select()]
 
 
 def get_labels(issue_id):
-    q = 'SELECT label FROM labels WHERE number == ?'
-    cursor = __execute(q, params=(issue_id,))
-    return [e[0] for e in cursor.fetchall()]
+    labs = Label.select().where(Label.issue == issue_id)
+    return [lab.name for lab in labs]
 
 
 def drop_labels(issue_id):
-    q = 'DELETE FROM labels WHERE number == ?'
-    __execute(q, params=(issue_id,), commit=True)
+    labs = Label.select().where(Label.issue == issue_id)
+    for lab in labs:
+        lab.delete_instance()
 
 
 def add_label(label, issue_id):
-    q = 'INSERT INTO labels (label, number) VALUES (?,?)'
-    cursor = __execute(q, params=(label, issue_id), commit=True)
-    return cursor.fetchall()
+    issue = Issue.get(id=issue_id)
+    lab = Label(
+        name=label,
+        issue=issue)
+    lab.save()

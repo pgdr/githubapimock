@@ -52,18 +52,18 @@ class TestClient(unittest.TestCase):
             client.advance(num)
 
 
-    def test_status(self):
+    def test_state(self):
         num = client.create_issue('Feature a', 'buggy bugs feet')
-        status = client.get_status(num)
-        self.assertEqual('open', status)
+        state = client.get_state(num)
+        self.assertEqual('open', state)
 
         client.close_issue(num)
-        status = client.get_status(num)
-        self.assertEqual('closed', status)
+        state = client.get_state(num)
+        self.assertEqual('closed', state)
 
-        client.set_status(num, 'xyz')
-        status = client.get_status(num)
-        self.assertEqual('xyz', status)
+        client.set_state(num, 'xyz')
+        state = client.get_state(num)
+        self.assertEqual('xyz', state)
 
 
 if __name__ == '__main__':
