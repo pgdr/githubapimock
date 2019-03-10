@@ -47,7 +47,7 @@ setup(
     },
     license='MIT',
     keywords='github api source',
-    version='0.0.3',
+    version='0.0.4',
     install_requires=requirements(),
     entry_points={},
     test_suite='tests',
